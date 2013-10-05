@@ -45,6 +45,8 @@ build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.10
 
+-- 
+
 library
   exposed-modules:
       Falling
@@ -52,7 +54,8 @@ library
       base  >=4.6 && <4.7
     , mtl   >=2.1 && <2.2
     , lens  >=3.9 && <3.10
-
+  -- Base language which the package is written in.
+  default-language:    Haskell2010
 
 test-suite test
   type: exitcode-stdio-1.0
@@ -63,6 +66,8 @@ test-suite test
     , lens  >=3.9 && <3.10
     , hspec ==1.6.*
     , QuickCheck >=2.6 && <2.7
+  -- Base language which the package is written in.
+  default-language:    Haskell2010
 
 executable falling
   -- .hs or .lhs file containing the Main module.

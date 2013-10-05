@@ -49,6 +49,7 @@ infixr 5 *.
 a *. b = fmap (* a) b
 
 -- | Scalar division
+infixr 5 ./
 (./) :: (Functor f, Fractional b) => f b -> b -> f b
 b ./ a = fmap (/ a) b
 
@@ -92,9 +93,11 @@ update :: Floating n => [Particle n] -> [Particle n]
 update = zipping $ \b h a ->
   velocity +~ ((grav h a + grav h b) ./ (h ^. mass)) $ h
   where
+    -- Map over a list in a context-sensitive way.
     zipping :: ([a] -> a -> [a] -> b) -> [a] -> [b]
     zipping _ [] = []
     zipping f (c : cs) = f [] c cs : zipping (\b h a -> f (c : b) h a) cs
+    -- Add the force resulting from each particle due to gravitation.
     grav :: Floating b => Particle b -> [Particle b] -> Vector b
     grav a = sum . map (flip gravitation a)
 

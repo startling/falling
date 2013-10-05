@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 module Main where
 -- base
 import Data.Monoid
@@ -9,6 +10,25 @@ import Graphics.Gloss hiding (Vector)
 import Graphics.Gloss.Interface.Pure.Game hiding (Vector)
 -- falling
 import Falling
+
+-- | The interface can be in two states: one, where everything
+--   is just running by itself, and another, where we're adding
+--   and changing things about one particular particle.
+data Interface n
+  = Running
+    { _particles :: [Particle n]
+    }
+  | Adding
+    { _adding    :: Particle n
+    , _particles :: [Particle n]
+    }
+  deriving
+  ( Eq
+  , Ord
+  , Show
+  )
+makeLenses ''Interface
+makePrisms ''Interface
 
 main :: IO ()
 main = play (InWindow "particles" (300, 300) (100, 100))

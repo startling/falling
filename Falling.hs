@@ -98,21 +98,3 @@ update = zipping $ \b h a ->
     grav :: Floating b => Particle b -> [Particle b] -> Vector b
     grav a = sum . map (flip gravitation a)
 
-data Interface n
-  = Running
-  { _particles :: [Particle n]
-  }
-  | Adding
-  { _adding    :: Particle n
-  , _particles :: [Particle n]
-  }
-  deriving
-  ( Eq
-  , Ord
-  , Show
-  , Functor
-  , Foldable
-  , Traversable
-  )
-makeLenses ''Interface
-makePrisms ''Interface

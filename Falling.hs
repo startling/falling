@@ -79,8 +79,8 @@ particle p = Particle p 0 1
 
 -- | Find the force due to gravity of one particle on another.
 gravitation :: Floating n => Particle n -> Particle n -> Vector n
-gravitation a b = recip ((distance `on` view place) a b ^ (2 :: Integer))
-  *. a ^. mass *. b ^. mass
+gravitation a b = a ^. mass *. b ^. mass
+  *. recip ((distance `on` view place) a b ^ (2 :: Integer))
   *. signum (((-) `on` view place) a b)
 
 -- | Move every particle by its current velocity, given a time step.

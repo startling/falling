@@ -70,7 +70,7 @@ single = Translate <$> (^. place . x)
 
 -- A massive particle at the origin.
 sun :: Particle Float
-sun = Particle 0 0 2000
+sun = Particle 0 0 200
 
 -- Iterate the world.
 iteration :: Float -> Interface Float -> Interface Float

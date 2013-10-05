@@ -5,12 +5,8 @@
 module Falling where
 -- base
 import Control.Applicative
-import Control.Monad
 import Data.Foldable (Foldable(..))
 import Data.Function
-import Data.Monoid
--- mtl
-import Control.Monad.State
 -- lens
 import Control.Lens
 
@@ -83,13 +79,13 @@ particle p = Particle p 0 1
 
 -- | Find the force due to gravity of one particle on another.
 gravitation :: Floating n => Particle n -> Particle n -> Vector n
-gravitation a b = recip ((distance `on` view place) a b ^ 2)
+gravitation a b = recip ((distance `on` view place) a b ^ (2 :: Integer))
   *. a ^. mass *. b ^. mass
   *. signum (((-) `on` view place) a b)
 
 -- | Move every particle by its current velocity, given a time step.
 move :: Num n => n -> Particle n -> Particle n
-move s x = place +~ (s *. view velocity x) $ x
+move s p = place +~ (s *. view velocity p) $ p
 
 -- | Let every particle in a list act on every other particle.
 update :: Floating n => [Particle n] -> [Particle n]
@@ -97,8 +93,8 @@ update = zipping $ \b h a ->
   velocity +~ ((grav h a + grav h b) ./ (h ^. mass)) $ h
   where
     zipping :: ([a] -> a -> [a] -> b) -> [a] -> [b]
-    zipping f [] = []
-    zipping f (x : xs) = f [] x xs : zipping (\b h a -> f (x:b) h a) xs
+    zipping _ [] = []
+    zipping f (c : cs) = f [] c cs : zipping (\b h a -> f (c : b) h a) cs
     grav :: Floating b => Particle b -> [Particle b] -> Vector b
     grav a = sum . map (flip gravitation a)
 

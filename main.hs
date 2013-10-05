@@ -39,17 +39,17 @@ main = play (InWindow "particles" (300, 300) (100, 100))
     -- If we get a mouseclick down in 'Running', add a particle at the
     -- place of the click and switch to 'Adding'; we'll be editing
     -- it until the corresponding mouseclick up.
-    withInput (EventKey (MouseButton LeftButton) Down _ (x, y))
-      (Running ps) = Adding (particle $ Vector x y 0) ps
+    withInput (EventKey (MouseButton LeftButton) Down _ (x', y'))
+      (Running ps) = Adding (particle $ Vector x' y' 0) ps
     -- If we get a mouse movement while in 'Adding', change the
     -- velocity of the new particle to the new place of the mouse;
     -- keep in mind the offset of particle.
-    withInput (EventKey (MouseButton LeftButton) _ _ (x, y))
+    withInput (EventKey (MouseButton LeftButton) _ _ (_, _))
       (Adding p ps) = Running (p : ps)
     -- If we get a mouseclick up while in 'Adding', push the particle
     -- into the list of particles and switch to 'Running'.
-    withInput (EventMotion (x, y)) (Adding p ps) = Adding
-      (velocity .~ view place p - Vector x y 0 $ p) ps
+    withInput (EventMotion (x', y')) (Adding p ps) = Adding
+      (velocity .~ view place p - Vector x' y' 0 $ p) ps
     -- Otherwise just ignore the input.
     withInput _ i = i
     -- Iterate the world.

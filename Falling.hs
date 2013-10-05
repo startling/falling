@@ -54,50 +54,47 @@ infixr 5 ./
 b ./ a = fmap (/ a) b
 
 -- | Euclidean distance between the endpoints of two vectors.
-distance :: Floating a => Vector a -> Vector a -> a
-distance b a = signum d * (abs d ** recip 3) where
-  d = delta x a b + delta y a b + delta z a b
-  delta l = ((-) `on` view l)
-
--- | Particles include a location, a place, and a velocity.
-data Particle n = Particle
-  { _place    :: Vector n
-  , _velocity :: Vector n
-  , _mass     :: n
-  } deriving
-  ( Eq
-  , Ord
-  , Show
-  , Functor
-  , Foldable
-  , Traversable
-  )
-makeLenses ''Particle
-
--- | Create a particle, given its place.
-particle :: Num n => Vector n -> Particle n
-particle p = Particle p 0 1
-
--- | Find the force due to gravity of one particle on another.
-gravitation :: Floating n => Particle n -> Particle n -> Vector n
-gravitation a b = recip ((distance `on` view place) a b ^ (2 :: Integer))
-  *. a ^. mass *. b ^. mass
-  *. signum (((-) `on` view place) a b)
-
--- | Move every particle by its current velocity, given a time step.
-move :: Num n => n -> Particle n -> Particle n
-move s p = place +~ (s *. view velocity p) $ p
-
--- | Let every particle in a list act on every other particle.
-update :: Floating n => [Particle n] -> [Particle n]
-update = zipping $ \b h a ->
-  velocity +~ ((grav h a + grav h b) ./ (h ^. mass)) $ h
-  where
-    -- Map over a list in a context-sensitive way.
-    zipping :: ([a] -> a -> [a] -> b) -> [a] -> [b]
-    zipping _ [] = []
-    zipping f (c : cs) = f [] c cs : zipping (\b h a -> f (c : b) h a) cs
-    -- Add the force resulting from each particle due to gravitation.
-    grav :: Floating b => Particle b -> [Particle b] -> Vector b
-    grav a = sum . map (flip gravitation a)
-
+distance a b = sumOf traverse . (^^ 2)
+--
+---- | Particles include a location, a place, and a velocity.
+--data Particle n = Particle
+--  { _place    :: Vector n
+--  , _velocity :: Vector n
+--  , _mass     :: n
+--  } deriving
+--  ( Eq
+--  , Ord
+--  , Show
+--  , Functor
+--  , Foldable
+--  , Traversable
+--  )
+--makeLenses ''Particle
+--
+---- | Create a particle, given its place.
+--particle :: Num n => Vector n -> Particle n
+--particle p = Particle p 0 1
+--
+---- | Find the force due to gravity of one particle on another.
+--gravitation :: Floating n => Particle n -> Particle n -> Vector n
+--gravitation a b = recip ((distance `on` view place) a b ^ (2 :: Integer))
+--  *. a ^. mass *. b ^. mass
+--  *. signum (((-) `on` view place) a b)
+--
+---- | Move every particle by its current velocity, given a time step.
+--move :: Num n => n -> Particle n -> Particle n
+--move s p = place +~ (s *. view velocity p) $ p
+--
+---- | Let every particle in a list act on every other particle.
+--update :: Floating n => [Particle n] -> [Particle n]
+--update = zipping $ \b h a ->
+--  velocity +~ ((grav h a + grav h b) ./ (h ^. mass)) $ h
+--  where
+--    -- Map over a list in a context-sensitive way.
+--    zipping :: ([a] -> a -> [a] -> b) -> [a] -> [b]
+--    zipping _ [] = []
+--    zipping f (c : cs) = f [] c cs : zipping (\b h a -> f (c : b) h a) cs
+--    -- Add the force resulting from each particle due to gravitation.
+--    grav :: Floating b => Particle b -> [Particle b] -> Vector b
+--    grav a = sum . map (flip gravitation a)
+--

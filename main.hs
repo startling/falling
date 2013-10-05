@@ -31,7 +31,7 @@ makeLenses ''Interface
 makePrisms ''Interface
 
 main :: IO ()
-main = play (InWindow "particles" (300, 300) (100, 100))
+main = play (InWindow "falling!" (300, 300) (100, 100))
   black 40 (Running [sun]) redraw withInput iteration
   where
     -- Massive particle in the middle.

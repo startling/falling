@@ -8,6 +8,10 @@ import Control.Lens
 -- gloss
 import Graphics.Gloss hiding (Vector)
 import Graphics.Gloss.Interface.Pure.Game hiding (Vector)
+-- colour
+import Data.Colour (Colour)
+import Data.Colour.RGBSpace
+import Data.Colour.RGBSpace.HSV
 -- falling
 import Falling
 
@@ -56,11 +60,28 @@ redraw i = foldMapOf (particles . traverse) single i
     Running _ -> mempty
     -- If we're in an 'Adding', draw the new particle
     -- and a line indicating its velocity.
-    Adding p _ -> let d = p ^. place - p ^. velocity in
-      Color red (Line
+    Adding p _ -> let
+        -- The vector being drawn from the particle.
+        d :: Vector Float       
+        d = p ^. place - p ^. velocity
+        -- The color to draw the vector in.
+        c :: Color
+        c = uncurryRGB makeColor
+          (hsv (angle (d ^. x) (d ^. y)) 0.5 0.5) 1 in
+      -- Draw the particle we're adding and a line from it
+      -- to the mouse, representing the inverse of its
+      -- velocity.
+      single p <> Color c (Line
         [ (p ^. place . x, p ^. place . y)
         , (d ^. x, d ^. y)
-        ]) <> single p
+        ])
+  where
+    -- Radians to degrees.
+    degrees :: Floating t => t -> t
+    degrees = (*) (180 / pi)
+    -- Angle of a vector, in degrees.
+    angle :: Floating t => t -> t -> t
+    angle x y = degrees . atan $ y / x
 
 -- Draw a single particle as a white circle.
 single :: Particle Float -> Picture

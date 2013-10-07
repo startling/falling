@@ -40,10 +40,14 @@ main = hspec $ do
     it "gravitation a b = negate (gravitation b a)." . property $
       \(D a) b -> a == b ||
         gravitation a b == negate (gravitation b a)
-    it "with a /= b, gravitation a b has no NaN." $ do
-      property
-        $ \(D a) b -> a == b ||
-          allOf traverse (not . isNaN) (gravitation a b)
+    it "with a /= b, gravitation a b has no NaN." . property $
+      \(D a) b -> a == b ||
+        allOf traverse (not . isNaN) (gravitation a b)
   describe "update" $ do
     it "with a ^. mass /= 0, update [a] = [a]." . property $
       \(D a) -> a ^. mass == 0 || update [a] == [a]
+    it "never produces NaNs." . property $
+      \as -> allOf (traverse . traverse) (not . isNaN)
+        $ update (as :: [Particle Double])
+    it "preserves length." . property $
+      \as -> length (update as) == length (as :: [Particle Double])

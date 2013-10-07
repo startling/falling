@@ -80,7 +80,7 @@ particle p = Particle p 0 1
 
 -- | Find the force due to gravity of one particle on another.
 gravitation :: Floating n => Particle n -> Particle n -> Vector n
-gravitation a b = a ^. mass *. b ^. mass
+gravitation a b = (a ^. mass * b ^. mass)
   *. recip (distance (a ^. place) (b ^. place) ^ (2 :: Int))
   *. signum (a ^. place - b ^. place)
 

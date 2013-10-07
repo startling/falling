@@ -32,8 +32,8 @@ main = hspec $ do
   describe "distance" $ do
     it "distance a a = 0.". property $
       \(D a) -> distance a a == 0
-    it "distance a b = negate (distance b a)." . property $
-      \(D a) b -> distance a b == negate (distance b a)
+    it "distance a b = distance b a." . property $
+      \(D a) b -> distance a b == distance b a
   describe "gravitation" $ do
     it "gravitation a a = Vector NaN NaN NaN." . property $
       \(D a) -> allOf traverse isNaN $ gravitation a a

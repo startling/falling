@@ -15,9 +15,8 @@ import Test.Hspec
 instance Arbitrary a => Arbitrary (Vector a) where
   arbitrary = Vector <$> arbitrary <*> arbitrary <*> arbitrary
 
-instance (Num n, Arbitrary n) => Arbitrary (Particle n) where
-  arbitrary = Particle <$> arbitrary
-    <*> arbitrary <*> (abs <$> arbitrary)
+instance Arbitrary n => Arbitrary (Particle n) where
+  arbitrary = Particle <$> arbitrary <*> arbitrary <*> arbitrary
 
 -- | Stupid type to improve inference for QuickCheck things.
 newtype Doubled f = D (f Double)

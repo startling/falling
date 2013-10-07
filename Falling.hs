@@ -19,6 +19,7 @@ data Vector a = Vector
   ( Eq
   , Ord
   , Show
+  , Read
   , Functor
   , Foldable
   , Traversable
@@ -66,6 +67,7 @@ data Particle n = Particle
   ( Eq
   , Ord
   , Show
+  , Read
   , Functor
   , Foldable
   , Traversable

@@ -82,7 +82,7 @@ particle p = Particle p 0 1
 gravitation :: Floating n => Particle n -> Particle n -> Vector n
 gravitation a b = (a ^. mass * b ^. mass)
   *. recip (distance (a ^. place) (b ^. place) ^ (2 :: Int))
-  *. signum (a ^. place - b ^. place)
+  *. signum (b ^. place - a ^. place)
 
 -- | Move every particle by its current velocity, given a time step.
 move :: Num n => n -> Particle n -> Particle n
@@ -99,5 +99,5 @@ update = zipping $ \b h a ->
     zipping f (c : cs) = f [] c cs : zipping (\b h a -> f (c : b) h a) cs
     -- Add the force resulting from each particle due to gravitation.
     grav :: Floating b => Particle b -> [Particle b] -> Vector b
-    grav a = sum . map (flip gravitation a)
+    grav a = sum . map (gravitation a)
 

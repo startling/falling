@@ -7,7 +7,6 @@ module Falling where
 import Prelude hiding (sum)
 import Control.Applicative
 import Data.Foldable (Foldable(..), sum)
-import Data.Function
 -- lens
 import Control.Lens
 
@@ -56,7 +55,7 @@ b ./ a = fmap (/ a) b
 
 -- | Euclidean distance between the endpoints of two vectors.
 distance :: Floating a => Vector a -> Vector a -> a
-distance a b = sqrt . sum $ (a - b) ^ 2
+distance a b = sqrt . sum $ (a - b) ^ (2 :: Int)
 
 -- | Particles include a location, a place, and a velocity.
 data Particle n = Particle
@@ -80,8 +79,8 @@ particle p = Particle p 0 1
 -- | Find the force due to gravity of one particle on another.
 gravitation :: Floating n => Particle n -> Particle n -> Vector n
 gravitation a b = a ^. mass *. b ^. mass
-  *. recip ((distance `on` view place) a b ^ (2 :: Integer))
-  *. signum (((-) `on` view place) a b)
+  *. recip (distance (a ^. place) (b ^. place) ^ (2 :: Int))
+  *. signum (a ^. place - b ^. place)
 
 -- | Move every particle by its current velocity, given a time step.
 move :: Num n => n -> Particle n -> Particle n

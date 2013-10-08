@@ -90,6 +90,7 @@ move s p = place +~ (s *. view velocity p) $ p
 
 -- | Let every particle in a list act on every other particle, changing
 --   its velocity.
+update :: (Eq n, Floating n) => [Particle n] -> [Particle n]
 update ss = (`map` ss) $ \a -> (&) a . (+~) velocity
   . (./ a ^. mass) . sum . map (gravitation a) . filter (/= a) $ ss
 

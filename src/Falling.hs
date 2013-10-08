@@ -60,9 +60,9 @@ distance a b = sqrt . sum $ (a - b) ^ (2 :: Int)
 
 -- | Particles include a location, a place, and a velocity.
 data Particle n = Particle
-  { _place    :: Vector n
-  , _velocity :: Vector n
-  , _mass     :: n
+  { _place    :: !(Vector n)
+  , _velocity :: !(Vector n)
+  , _mass     :: !n
   } deriving
   ( Eq
   , Ord

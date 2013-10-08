@@ -12,9 +12,9 @@ import Control.Lens
 
 -- | 3-vectors.
 data Vector a = Vector
-  { _x :: a
-  , _y :: a
-  , _z :: a
+  { _x :: !a
+  , _y :: !a
+  , _z :: !a
   } deriving
   ( Eq
   , Ord

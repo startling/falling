@@ -93,4 +93,4 @@ move s p = place +~ (s *. view velocity p) $ p
 update :: (Eq n, Floating n) => [Particle n] -> [Particle n]
 update ss = (`map` ss) $ \a -> (&) a . (+~) velocity
   . (./ a ^. mass) . sum . map (gravitation a) . filter (/= a) $ ss
-
+{-# SPECIALIZE update :: [Particle Float] -> [Particle Float] #-}

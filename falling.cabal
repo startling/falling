@@ -46,7 +46,6 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 -- 
-
 library
   exposed-modules:
       Falling
@@ -55,7 +54,9 @@ library
     , mtl   >=2.1 && <2.2
     , lens  >=3.9 && <3.10
   -- Base language which the package is written in.
-  default-language:    Haskell2010
+  default-language: Haskell2010
+  -- Where the source is:
+  hs-source-dirs: src
 
 test-suite test
   type: exitcode-stdio-1.0
@@ -67,16 +68,16 @@ test-suite test
     , hspec ==1.6.*
     , QuickCheck >=2.6 && <2.7
   -- Base language which the package is written in.
-  default-language:    Haskell2010
+  default-language: Haskell2010
+  -- Where the source is:
+  hs-source-dirs: ., src
 
 executable falling
   -- .hs or .lhs file containing the Main module.
   main-is: main.hs
-  
   -- Modules included in this executable, other than Main.
   other-modules:
       Falling
-  
   -- Other library packages from which modules are imported.
   build-depends:
       base   >=4.6 && <4.7
@@ -84,10 +85,10 @@ executable falling
     , lens   >=3.9 && <3.10
     , gloss  >=1.8 && <1.9
     , colour == 2.3.*
-  
   -- Base language which the package is written in.
   default-language:    Haskell2010
-
   -- Use the threaded runtime.
   ghc-options: -threaded
+  -- Where the source is:
+  hs-source-dirs: ., src
 

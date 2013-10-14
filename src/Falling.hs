@@ -114,6 +114,7 @@ gravitation :: Floating n => Particle n -> Particle n -> Vector n
 gravitation a b = (a ^. mass * b ^. mass)
   *. recip (distance (a ^. place) (b ^. place) ^ (2 :: Int))
   *. signum (b ^. place - a ^. place)
+{-# SPECIALIZE gravitation :: Particle Float -> Particle Float -> Vector Float #-}
 
 -- | Move every particle by its current velocity, given a time step.
 move :: Num n => n -> Particle n -> Particle n

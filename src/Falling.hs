@@ -1,7 +1,4 @@
 {-# Language TemplateHaskell #-}
-{-# Language DeriveFunctor #-}
-{-# Language DeriveFoldable #-}
-{-# Language DeriveTraversable #-}
 module Falling where
 -- base
 import Prelude hiding (sum)
@@ -26,30 +23,45 @@ makeLenses ''Vector
 
 instance Functor Vector where
   fmap f (Vector x y z) = Vector (f x) (f y) (f z)
+  {-# INLINE fmap #-}
 
 instance Foldable Vector where
   foldMap f (Vector x y z) = f x <> f y <> f z
+  {-# INLINE foldMap #-}
 
 instance Traversable Vector where
   traverse f (Vector x y z) = Vector <$> f x <*> f y <*> f z
+  {-# INLINE traverse #-}
 
 instance Applicative Vector where
   pure a = Vector a a a
+  {-# INLINE pure #-}
   Vector f g h <*> Vector a b c = Vector (f a) (g b) (h c)
+  {-# INLINE (<*>) #-}
 
 instance Num a => Num (Vector a) where
   (+) = liftA2 (+)
+  {-# INLINE (+) #-}
   (*) = liftA2 (*)
+  {-# INLINE (*) #-}
   (-) = liftA2 (-)
+  {-# INLINE (-) #-}
   abs = fmap abs
+  {-# INLINE abs #-}
   negate = fmap negate
+  {-# INLINE negate #-}
   signum = fmap signum
+  {-# INLINE signum #-}
   fromInteger = pure . fromInteger
+  {-# INLINE fromInteger #-}
 
 instance Fractional a => Fractional (Vector a) where
   (/) = liftA2 (/)
+  {-# INLINE (/) #-}
   recip = fmap recip
+  {-# INLINE recip #-}
   fromRational = pure . fromRational
+  {-# INLINE fromRational #-}
 
 -- | Scalar multiplication
 infixr 5 *.
@@ -75,11 +87,23 @@ data Particle n = Particle
   , Ord
   , Show
   , Read
-  , Functor
-  , Foldable
-  , Traversable
   )
 makeLenses ''Particle
+
+instance Functor Particle where
+  fmap f (Particle p v m) = Particle (fmap f p) (fmap f v) (f m)
+  {-# INLINE fmap #-}
+
+instance Foldable Particle where
+  foldMap f (Particle p v m) = foldMap f p <> foldMap f v <> f m
+  {-# INLINE foldMap #-}
+
+instance Traversable Particle where
+  traverse f (Particle p v m) = Particle
+    <$> traverse f p
+    <*> traverse f v
+    <*> f m
+  {-# INLINE traverse #-}
 
 -- | Create a particle, given its place.
 particle :: Num n => Vector n -> Particle n

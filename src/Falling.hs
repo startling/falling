@@ -7,6 +7,7 @@ module Falling where
 import Prelude hiding (sum)
 import Control.Applicative
 import Data.Foldable (Foldable(..), sum)
+import Data.Monoid
 -- lens
 import Control.Lens
 
@@ -20,11 +21,17 @@ data Vector a = Vector
   , Ord
   , Show
   , Read
-  , Functor
-  , Foldable
-  , Traversable
   )
 makeLenses ''Vector
+
+instance Functor Vector where
+  fmap f (Vector x y z) = Vector (f x) (f y) (f z)
+
+instance Foldable Vector where
+  foldMap f (Vector x y z) = f x <> f y <> f z
+
+instance Traversable Vector where
+  traverse f (Vector x y z) = Vector <$> f x <*> f y <*> f z
 
 instance Applicative Vector where
   pure a = Vector a a a

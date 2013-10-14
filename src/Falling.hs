@@ -118,6 +118,7 @@ gravitation a b = (a ^. mass * b ^. mass)
 -- | Move every particle by its current velocity, given a time step.
 move :: Num n => n -> Particle n -> Particle n
 move s p = place +~ (s *. view velocity p) $ p
+{-# INLINE move #-}
 
 -- | Let every particle in a list act on every other particle, changing
 --   its velocity.

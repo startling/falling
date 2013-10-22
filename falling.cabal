@@ -45,6 +45,11 @@ build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.10
 
+-- Git HEAD.
+source-repository head
+  type: git
+  location: git@github.com:startling/falling.git
+
 -- 
 library
   exposed-modules:

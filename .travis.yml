@@ -7,7 +7,7 @@ matrix:
   allow_failures:
     - env: GHCVER=head
 
-before-install:
+before_install:
   - sudo add-apt-repository -y ppa:hvr/ghc
   - sudo apt-get update
   - sudo apt-get install cabal-install-1.18 ghc-$GHCVER

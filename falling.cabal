@@ -55,9 +55,10 @@ library
   exposed-modules:
       Falling
   build-depends:
-      base  >=4.6 && <4.7
-    , mtl   >=2.1 && <2.2
-    , lens  >=3.9 && <3.10
+      base   >=4.6 && <4.7
+    , mtl    >=2.1 && <2.2
+    , lens   >=3.9 && <3.10
+    , linear >=1.3 && <2.0
   -- Base language which the package is written in.
   default-language: Haskell2010
   -- Where the source is:
@@ -67,10 +68,11 @@ test-suite test
   type: exitcode-stdio-1.0
   main-is: test.hs
   build-depends:
-      base  >=4.6 && <4.7
-    , mtl   >=2.1 && <2.2
-    , lens  >=3.9 && <3.10
-    , hspec ==1.6.*
+      base   >=4.6 && <4.7
+    , mtl    >=2.1 && <2.2
+    , lens   >=3.9 && <3.10
+    , linear >=1.3 && <2.0
+    , hspec  ==1.6.*
     , QuickCheck >=2.6 && <2.7
   -- Base language which the package is written in.
   default-language: Haskell2010
@@ -88,6 +90,7 @@ executable falling
       base   >=4.6 && <4.7
     , mtl    >=2.1 && <2.2
     , lens   >=3.9 && <3.10
+    , linear >=1.3 && <2.0
     , gloss  >=1.8 && <1.9
     , colour == 2.3.*
   -- Base language which the package is written in.

@@ -5,6 +5,8 @@
 import Control.Applicative
 -- lens
 import Control.Lens
+-- linear
+import Linear
 -- falling
 import Falling
 -- QuickCheck
@@ -12,8 +14,8 @@ import Test.QuickCheck
 -- hspec
 import Test.Hspec
 
-instance Arbitrary a => Arbitrary (Vector a) where
-  arbitrary = Vector <$> arbitrary <*> arbitrary <*> arbitrary
+instance Arbitrary a => Arbitrary (V3 a) where
+  arbitrary = V3 <$> arbitrary <*> arbitrary <*> arbitrary
 
 instance Arbitrary n => Arbitrary (Particle n) where
   arbitrary = Particle <$> arbitrary <*> arbitrary <*> arbitrary
@@ -29,13 +31,8 @@ instance Arbitrary (f Double) => Arbitrary (Doubled f) where
 
 main :: IO ()
 main = hspec $ do
-  describe "distance" $ do
-    it "distance a a = 0.". property $
-      \(D a) -> distance a a == 0
-    it "distance a b = distance b a." . property $
-      \(D a) b -> distance a b == distance b a
   describe "gravitation" $ do
-    it "gravitation a a = Vector NaN NaN NaN." . property $
+    it "gravitation a a = V3 NaN NaN NaN." . property $
       \(D a) -> allOf traverse isNaN $ gravitation a a
     it "gravitation a b = negate (gravitation b a)." . property $
       \(D a) b -> a == b ||

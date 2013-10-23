@@ -1,5 +1,4 @@
 env:
-  - GHCVER=7.6.2
   - GHCVER=7.6.3
  
 matrix:

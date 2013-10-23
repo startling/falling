@@ -1,4 +1,5 @@
 {-# Language TemplateHaskell #-}
+{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 module Falling where
 -- base
 import Control.Applicative
@@ -19,23 +20,11 @@ data Particle n = Particle
   , Ord
   , Show
   , Read
+  , Functor
+  , Foldable
+  , Traversable
   )
 makeLenses ''Particle
-
-instance Functor Particle where
-  fmap f (Particle p v m) = Particle (fmap f p) (fmap f v) (f m)
-  {-# INLINE fmap #-}
-
-instance Foldable Particle where
-  foldMap f (Particle p v m) = foldMap f p <> foldMap f v <> f m
-  {-# INLINE foldMap #-}
-
-instance Traversable Particle where
-  traverse f (Particle p v m) = Particle
-    <$> traverse f p
-    <*> traverse f v
-    <*> f m
-  {-# INLINE traverse #-}
 
 -- | Create a particle, given its place.
 particle :: Num n => V3 n -> Particle n

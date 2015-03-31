@@ -89,7 +89,7 @@ redraw i = foldMapOf (particles . traverse) single i
 single :: Particle Float -> Picture
 single = Translate <$> (^. place . _x)
   <*> (^. place . _y)
-  ?? Color white (Circle 0.5)
+  ?? Color white (circleSolid 2.0)
 
 -- A massive particle at the origin.
 sun :: Particle Float
